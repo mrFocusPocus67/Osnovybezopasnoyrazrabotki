@@ -1,0 +1,50 @@
+name: Lint
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    # Для Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install flake8 pylint black
+    
+    - name: Run flake8
+      run: flake8 . --count --max-complexity=10 --statistics
+    
+    - name: Run pylint
+      run: pylint **/*.py
+    
+    - name: Check formatting with black
+      run: black --check .
+    
+    # Для Go
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+    
+    - name: Run golangci-lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        version: latest
+    
+    # Для C
+    - name: Run cppcheck
+      run: |
+        sudo apt-get install cppcheck
+        cppcheck --error-exitcode=1 .
