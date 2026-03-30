@@ -1,4 +1,4 @@
-name: Lint
+name: Super Linter
 
 on:
   push:
@@ -8,43 +8,21 @@ on:
 
 jobs:
   lint:
+    name: Run Super Linter
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
-    
-    # Для Python
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        pip install flake8 pylint black
-    
-    - name: Run flake8
-      run: flake8 . --count --max-complexity=10 --statistics
-    
-    - name: Run pylint
-      run: pylint **/*.py
-    
-    - name: Check formatting with black
-      run: black --check .
-    
-    # Для Go
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.21'
-    
-    - name: Run golangci-lint
-      uses: golangci/golangci-lint-action@v3
-      with:
-        version: latest
-    
-    # Для C
-    - name: Run cppcheck
-      run: |
-        sudo apt-get install cppcheck
-        cppcheck --error-exitcode=1 .
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Run Super Linter
+        uses: github/super-linter@v6
+        env:
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_PYTHON_PYLINT: true
+          VALIDATE_PYTHON_FLAKE8: true
+          VALIDATE_GO: true
+          VALIDATE_C: true
+          VALIDATE_CPP: true
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
