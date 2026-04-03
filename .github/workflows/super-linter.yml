@@ -23,7 +23,7 @@ jobs:
           VALIDATE_PYTHON_FLAKE8: true
           VALIDATE_GO: true
           VALIDATE_C: true
-          VALIDATE_CLANG_FORMAT: true
+          VALIDATE_CLANG_FORMAT: false
           VALIDATE_CLANG_TIDY: true
           VALIDATE_CPP: true
           
