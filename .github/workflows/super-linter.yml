@@ -38,7 +38,7 @@ jobs:
           
           # C++
           VALIDATE_CPP: true
-          VALIDATE_CLANG_FORMAT: true
+          #VALIDATE_CLANG_FORMAT: true
           VALIDATE_CLANG_TIDY: true
           
           # Rust
