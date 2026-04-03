@@ -19,7 +19,6 @@ jobs:
         uses: super-linter/super-linter@v6
         env:
           VALIDATE_ALL_CODEBASE: true
-          VALIDATE_C: true
           VALIDATE_CPP: true
           VALIDATE_CLANG_TIDY: true
           
