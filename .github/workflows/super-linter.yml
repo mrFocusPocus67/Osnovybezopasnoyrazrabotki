@@ -23,10 +23,10 @@ jobs:
           VALIDATE_CPP: true
           VALIDATE_CLANG_TIDY: true
           
-          VALIDATE_PYTHON_PYLINT: false
-          VALIDATE_PYTHON_FLAKE8: false
-          VALIDATE_GO: false
-          VALIDATE_CLANG_FORMAT: false
+          #VALIDATE_PYTHON_PYLINT: false
+          #VALIDATE_PYTHON_FLAKE8: false
+          #VALIDATE_GO: false
+          #VALIDATE_CLANG_FORMAT: false
           
           
           
