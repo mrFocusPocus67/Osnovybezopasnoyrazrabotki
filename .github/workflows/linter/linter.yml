@@ -24,5 +24,8 @@ jobs:
           VALIDATE_GO: true
           VALIDATE_C: true
           VALIDATE_CPP: true
+          VALIDATE_CLANG_FORMAT: true
+          VALIDATE_CLANG_TIDY: true
+          
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
