@@ -15,8 +15,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
         with:
-          fetch-depth: 0
+          toolchain: stable
+          components: rustfmt, clippy
+          override: true
       
       - name: Run Super Linter
         uses: github/super-linter@v6
@@ -38,15 +43,16 @@ jobs:
           
           # C++
           VALIDATE_CPP: true
-          #VALIDATE_CLANG_FORMAT: true
           VALIDATE_CLANG_TIDY: true
           
           # Rust
           VALIDATE_RUST: true
           VALIDATE_RUST_CLIPPY: true
           VALIDATE_RUSTFMT: true
-
+          
+          VALIDATE_ALL_CODEBASE: true
+          
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LOG_LEVEL: INFO
+          LOG_LEVEL: DEBUG
           OUTPUT_DETAILS: detailed
