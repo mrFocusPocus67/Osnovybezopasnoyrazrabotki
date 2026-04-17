@@ -58,13 +58,19 @@ jobs:
         continue-on-error: true
         run: ./test_c
 
-      # ======================
-      # 🐹 GO
-      # ======================
+        # ======================
+        # 🐹 GO
+        # ======================
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+
+      - name: Debug Go (optional but useful)
+        run: |
+          pwd
+          ls -la
+          find . -name go.mod
 
       - name: Build Go
         continue-on-error: true
@@ -77,6 +83,8 @@ jobs:
       - name: Test Go
         continue-on-error: true
         run: go test ./...
+
+ 
 
       # ======================
       # 🐍 PYTHON
