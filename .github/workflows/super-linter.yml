@@ -13,10 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # ======================
-      # 🦀 RUST
-      # ======================
+        
+      #RUST
       - name: Setup Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -36,9 +34,8 @@ jobs:
         continue-on-error: true
         run: cargo test
 
-      # ======================
-      # ⚙️ C++
-      # ======================
+      # C++
+      
       - name: Build C++
         continue-on-error: true
         run: g++ -Wall -Wextra -Werror -fsanitize=address -g test.cpp -o test_cpp
@@ -47,9 +44,9 @@ jobs:
         continue-on-error: true
         run: ./test_cpp
 
-      # ======================
-      # ⚙️ C
-      # ======================
+
+      # C
+
       - name: Build C
         continue-on-error: true
         run: gcc -Wall -Wextra -Werror -fsanitize=address -g test.c -o test_c
@@ -58,9 +55,9 @@ jobs:
         continue-on-error: true
         run: ./test_c
 
-        # ======================
-        # 🐹 GO
-        # ======================
+
+        #  GO
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
@@ -86,9 +83,9 @@ jobs:
 
  
 
-      # ======================
-      # 🐍 PYTHON
-      # ======================
+
+      # PYTHON
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
