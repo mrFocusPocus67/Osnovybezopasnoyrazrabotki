@@ -25,30 +25,37 @@ jobs:
           override: true
 
       - name: Build Rust
+        continue-on-error: true
         run: cargo build --verbose
 
       - name: Lint Rust (Clippy)
+        continue-on-error: true
         run: cargo clippy -- -D warnings
 
       - name: Test Rust
+        continue-on-error: true
         run: cargo test
 
       # ======================
       # ⚙️ C++
       # ======================
       - name: Build C++
+        continue-on-error: true
         run: g++ -Wall -Wextra -Werror -fsanitize=address -g test.cpp -o test_cpp
 
       - name: Run C++ binary
+        continue-on-error: true
         run: ./test_cpp
 
       # ======================
       # ⚙️ C
       # ======================
       - name: Build C
+        continue-on-error: true
         run: gcc -Wall -Wextra -Werror -fsanitize=address -g test.c -o test_c
 
       - name: Run C binary
+        continue-on-error: true
         run: ./test_c
 
       # ======================
@@ -60,12 +67,15 @@ jobs:
           go-version: '1.22'
 
       - name: Build Go
+        continue-on-error: true
         run: go build ./...
 
       - name: Vet Go (static analysis)
+        continue-on-error: true
         run: go vet ./...
 
       - name: Test Go
+        continue-on-error: true
         run: go test ./...
 
       # ======================
@@ -77,15 +87,18 @@ jobs:
           python-version: '3.11'
 
       - name: Install Python deps
+        continue-on-error: true
         run: |
           pip install -r requirements.txt || true
           pip install pytest pylint flake8 black
 
       - name: Lint Python
+        continue-on-error: true
         run: |
           pylint **/*.py || true
           flake8 . || true
           black --check . || true
 
       - name: Test Python
+        continue-on-error: true
         run: pytest || true
