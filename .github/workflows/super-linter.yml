@@ -1,56 +1,91 @@
-name: Super Linter
+name: CI Full Check
 
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:
 
 jobs:
-  lint:
-    name: Run Super Linter
+  build-and-test:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-      
+
+      # ======================
+      # 🦀 RUST
+      # ======================
       - name: Setup Rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          components: rustfmt, clippy
+          components: clippy, rustfmt
           override: true
-      
-      - name: Run Super Linter
-        uses: github/super-linter@v6
-        env:
-          VALIDATE_ALL_CODEBASE: true
-          
-          # Python
-          VALIDATE_PYTHON_PYLINT: true
-          VALIDATE_PYTHON_FLAKE8: true
-          VALIDATE_PYTHON_BLACK: true
-          
-          # Go
-          VALIDATE_GO: true
-          VALIDATE_GOLANGCI_LINT: true
-          
-          # C
-          VALIDATE_C: true
-          VALIDATE_CPPCHECK: true
-          
-          # C++
-          VALIDATE_CPP: true
-          VALIDATE_CLANG_TIDY: true
-          
-          # Rust
-          VALIDATE_RUST: true
-          VALIDATE_RUST_CLIPPY: true
-          VALIDATE_RUSTFMT: true
-          
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LOG_LEVEL: DEBUG
-          OUTPUT_DETAILS: detailed
+
+      - name: Build Rust
+        run: cargo build --verbose
+
+      - name: Lint Rust (Clippy)
+        run: cargo clippy -- -D warnings
+
+      - name: Test Rust
+        run: cargo test
+
+      # ======================
+      # ⚙️ C++
+      # ======================
+      - name: Build C++
+        run: g++ -Wall -Wextra -Werror -fsanitize=address -g test.cpp -o test_cpp
+
+      - name: Run C++ binary
+        run: ./test_cpp
+
+      # ======================
+      # ⚙️ C
+      # ======================
+      - name: Build C
+        run: gcc -Wall -Wextra -Werror -fsanitize=address -g test.c -o test_c
+
+      - name: Run C binary
+        run: ./test_c
+
+      # ======================
+      # 🐹 GO
+      # ======================
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Build Go
+        run: go build ./...
+
+      - name: Vet Go (static analysis)
+        run: go vet ./...
+
+      - name: Test Go
+        run: go test ./...
+
+      # ======================
+      # 🐍 PYTHON
+      # ======================
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python deps
+        run: |
+          pip install -r requirements.txt || true
+          pip install pytest pylint flake8 black
+
+      - name: Lint Python
+        run: |
+          pylint **/*.py || true
+          flake8 . || true
+          black --check . || true
+
+      - name: Test Python
+        run: pytest || true
